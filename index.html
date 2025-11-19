@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+      AdonisJS - A fully featured web framework for Node.js
+    </title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link
+      href="https://fonts.bunny.net/css?family=instrument-sans:400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --sand-1: #fdfdfc;
+        --sand-2: #f9f9f8;
+        --sand-3: #f1f0ef;
+        --sand-4: #e9e8e6;
+        --sand-5: #e2e1de;
+        --sand-6: #dad9d6;
+        --sand-7: #cfceca;
+        --sand-8: #bcbbb5;
+        --sand-9: #8d8d86;
+        --sand-10: #82827c;
+        --sand-11: #63635e;
+        --sand-12: #21201c;
+      }
+    </style>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: [ "Instrument Sans", "sans-serif" ]
+            },
+            colors: {
+              primary: {
+                DEFAULT: "#5A45FF",
+                lighter: "#a599ff"
+              },
+              sand: {
+                1: "var(--sand-1)",
+                2: "var(--sand-2)",
+                3: "var(--sand-3)",
+                4: "var(--sand-4)",
+                5: "var(--sand-5)",
+                6: "var(--sand-6)",
+                7: "var(--sand-7)",
+                8: "var(--sand-8)",
+                9: "var(--sand-9)",
+                10: "var(--sand-10)",
+                11: "var(--sand-11)",
+                12: "var(--sand-12)"
+              },
+              'yellow-custom': '#FFD700',
+              'black-custom': '#000000'
+            }
+          }
+        }
+      };
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        .carousel-slide {
+            display: none;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        .carousel-slide.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0.4; }
+            to { opacity: 1; }
+        }
+        .testimonial-card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Animation pour le carrousel */
+        @keyframes fade {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            30% { opacity: 1; }
+            40% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+        
+        .carousel-item {
+            animation: fade 15s infinite;
+            position: absolute;
+            width: 100%;
+        }
+        
+        .carousel-item:nth-child(1) { animation-delay: 0s; }
+        .carousel-item:nth-child(2) { animation-delay: 5s; }
+        .carousel-item:nth-child(3) { animation-delay: 10s; }
+        
+        /* Animation pour les témoignages */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-250px * 5)); }
+        }
+        
+        .testimonial-slider {
+            animation: scroll 25s linear infinite;
+        }
+
+         .hover-lift {
+            transition: transform 0.2s ease-in-out;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+        }
+
+
+          .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .chatbot-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+        .chatbot-button:hover {
+            transform: scale(1.1);
+        }
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+        }
+        .chatbot-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            margin-bottom: 10px;
+        }
+        .user-message {
+            align-self: flex-end;
+            background: #667eea;
+            color: white;
+        }
+        .bot-message {
+            align-self: flex-start;
+            background: #f1f3f4;
+            color: #333;
+        }
+        .chatbot-input {
+            padding: 15px;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            gap: 10px;
+        }
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+        }
+        .send-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Navigation -->
+    <nav class="bg-yellow-custom shadow-md fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <img src="/images/logo.png" alt="aigle engineering" class="h-24 w-auto mr-2">
+                        <!--span class="text-xl font-bold text-black-custom">aigle engineering</span!-->
+                    </div>
+                </div>
+
+                <!-- Menu Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#accueil" class="text-black-custom hover:text-black-custom transition font-medium">Accueil</a>
+    <a href="#services" class="text-black-custom hover:text-black-custom transition font-medium">Nos services</a>
+    <a href="#histoire" class="text-black-custom hover:text-black-custom transition font-medium">Notre histoire</a>
+    <a href="#realisations" class="text-black-custom hover:text-black-custom transition font-medium">Nos réalisations</a>
+    <a href="#avis" class="text-black-custom hover:text-black-custom transition font-medium">Avis clients</a>
+    <a href="https://wa.me/243858444000?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20vos%20services%20de%20maintenance%20préventive" 
+       target="_blank" 
+       class="text-black-custom font-bold hover:text-green-600 transition flex items-center">
+        +243 858 444 000
+        <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.017 2.047C6.207 2.047 1.451 6.804 1.451 12.614c0 1.846.48 3.582 1.32 5.082L2 22l4.396-.771c1.454.78 3.102 1.227 4.621 1.227 5.811 0 10.567-4.756 10.567-10.567S17.828 2.047 12.017 2.047zm-5.94 14.57a7.86 7.86 0 01-1.3-4.623c0-4.35 3.536-7.886 7.886-7.886s7.886 3.536 7.886 7.886-3.536 7.886-7.886 7.886a7.83 7.83 0 01-3.785-.975l-.801-.419-2.001.35.373-.763a7.9 7.9 0 01-1.372-2.455zm10.19-5.926l-1.552 1.552-1.552-1.552-3.104 3.104 1.552 1.552 1.552 1.552 1.552-1.552 3.104-3.104-1.552-1.552z"/>
+        </svg>
+    </a>
+                </div>
+
+                <!-- Menu Mobile -->
+                <div class="md:hidden flex items-center">
+                    <button id="menu-toggle" class="text-black-custom focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Mobile Dropdown -->
+        <div id="mobile-menu" class="md:hidden hidden bg-yellow-custom">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+               <a href="#accueil" class="block px-3 py-2 text-black-custom hover:text-black-custom font-medium">Accueil</a>
+<a href="#services" class="block px-3 py-2 text-black-custom hover:text-black-custom font-medium">Nos services</a>
+<a href="#histoire" class="block px-3 py-2 text-black-custom hover:text-black-custom font-medium">Notre histoire</a>
+<a href="#realisations" class="block px-3 py-2 text-black-custom hover:text-black-custom font-medium">Nos réalisations</a>
+<a href="#avis" class="block px-3 py-2 text-black-custom hover:text-black-custom font-medium">Avis clients</a>
+<a href="https://wa.me/243858444000?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20vos%20services%20de%20maintenance%20préventive" 
+   target="_blank" 
+   class="block px-3 py-2 text-black-custom hover:text-green-600 font-bold flex items-center justify-between">
+    <span>+243 858 444 000</span>
+    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12.017 2.047C6.207 2.047 1.451 6.804 1.451 12.614c0 1.846.48 3.582 1.32 5.082L2 22l4.396-.771c1.454.78 3.102 1.227 4.621 1.227 5.811 0 10.567-4.756 10.567-10.567S17.828 2.047 12.017 2.047zm-5.94 14.57a7.86 7.86 0 01-1.3-4.623c0-4.35 3.536-7.886 7.886-7.886s7.886 3.536 7.886 7.886-3.536 7.886-7.886 7.886a7.83 7.83 0 01-3.785-.975l-.801-.419-2.001.35.373-.763a7.9 7.9 0 01-1.372-2.455zm10.19-5.926l-1.552 1.552-1.552-1.552-3.104 3.104 1.552 1.552 1.552 1.552 1.552-1.552 3.104-3.104-1.552-1.552z"/>
+    </svg>
+</a>
+            </div>
+        </div>
+    </nav>
+
+
+   <!-- Chatbot IA -->
+    <div class="chatbot-container">
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    <span>Assistant IA</span>
+                </div>
+                <button onclick="toggleChatbot()" class="text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    Bonjour ! Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="userInput" placeholder="Tapez votre message..." onkeypress="handleKeyPress(event)">
+                <button class="send-button" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chatbot-button" onclick="toggleChatbot()">
+            <i class="fas fa-robot text-xl"></i>
+        </div>
+    </div>
+
+    
+
+    <!-- Section Accueil - Carrousel -->
+   <!-- Section Accueil - Carrousel -->
+<!-- Section Accueil - Carrousel -->
+<section id="accueil" class="pt-16" aria-labelledby="carousel-heading">
+    <div class="relative overflow-hidden h-screen">
+        <!-- Carrousel -->
+        <div id="carousel" class="flex transition-transform duration-700 ease-in-out" role="region" aria-label="Carrousel de présentation">
+            <!-- Slide 1 -->
+            <div class="w-full flex-shrink-0 relative" role="group" aria-label="Slide 1 sur 3">
+                <div class="absolute inset-0 bg-black opacity-40" aria-hidden="true"></div>
+                <img 
+                    src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" 
+                    alt="Technicien électricien effectuant une installation électrique professionnelle"
+                    class="w-full h-full object-cover object-center"
+                    loading="lazy"
+                >
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <div class="text-white p-6 bg-black bg-opacity-30 rounded-lg backdrop-blur-sm">
+                            <h2 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">Votre partenaire de confiance</h2>
+                            <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">"L'excellence n'est pas un acte, mais une habitude. Nous apportons cette excellence dans chaque intervention."</p>
+                            <a href="#contact" class="inline-block bg-yellow-custom text-black-custom px-8 py-4 rounded-lg font-bold hover:bg-yellow-600 transition focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-lg">
+                                Contactez-nous
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="w-full flex-shrink-0 relative" role="group" aria-label="Slide 2 sur 3">
+                <div class="absolute inset-0 bg-black opacity-40" aria-hidden="true"></div>
+                <img 
+                    src="/images/image1.jpeg" 
+                    alt="Technicien en plomberie réalisant une installation de système hydraulique"
+                    class="w-full h-full object-cover object-center"
+                    loading="lazy"
+                >
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <div class="text-white p-6 bg-black bg-opacity-30 rounded-lg backdrop-blur-sm">
+                            <h2 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">Des solutions durables</h2>
+                            <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">"La qualité reste longtemps après que le prix est oublié. Nous privilégions des solutions durables pour votre confort."</p>
+                            <a href="#services" class="inline-block bg-yellow-custom text-black-custom px-8 py-4 rounded-lg font-bold hover:bg-yellow-600 transition focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-lg">
+                                Nos services
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="w-full flex-shrink-0 relative" role="group" aria-label="Slide 3 sur 3">
+                <div class="absolute inset-0 bg-black opacity-40" aria-hidden="true"></div>
+                <img 
+                    src="/images/image4.jpg" 
+                    alt="Technicien spécialisé en climatisation installant un système de refroidissement"
+                    class="w-full h-full object-cover object-center"
+                    loading="lazy"
+                >
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                        <div class="text-white p-6 bg-black bg-opacity-30 rounded-lg backdrop-blur-sm">
+                            <h2 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">Expertise et professionnalisme</h2>
+                            <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">"Notre force réside dans la qualité de
+                                                                                   nos prestations et l’esprit d’excellence
+                                                                                    qui nous anime."</p>
+                            <a href="#realisations" class="inline-block bg-yellow-custom text-black-custom px-8 py-4 rounded-lg font-bold hover:bg-yellow-600 transition focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-lg">
+                                Nos réalisations
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contrôles du carrousel -->
+        <div class="absolute inset-0 flex items-center justify-between px-4">
+            <button 
+                id="prev" 
+                class="bg-black-custom bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-70 transition focus:outline-none focus:ring-2 focus:ring-white transform hover:scale-110"
+                aria-label="Image précédente"
+            >
+                <i class="fas fa-chevron-left w-5 h-5" aria-hidden="true"></i>
+            </button>
+            <button 
+                id="next" 
+                class="bg-black-custom bg-opacity-50 text-white p-4 rounded-full hover:bg-opacity-70 transition focus:outline-none focus:ring-2 focus:ring-white transform hover:scale-110"
+                aria-label="Image suivante"
+            >
+                <i class="fas fa-chevron-right w-5 h-5" aria-hidden="true"></i>
+            </button>
+        </div>
+        
+        <!-- Indicateurs -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3" role="tablist" aria-label="Indicateurs du carrousel">
+            <button 
+                class="carousel-indicator w-4 h-4 rounded-full bg-white bg-opacity-50 hover:bg-opacity-100 transition focus:outline-none focus:ring-2 focus:ring-white" 
+                role="tab" 
+                aria-label="Aller à la slide 1"
+                data-slide="0"
+            ></button>
+            <button 
+                class="carousel-indicator w-4 h-4 rounded-full bg-white bg-opacity-50 hover:bg-opacity-100 transition focus:outline-none focus:ring-2 focus:ring-white" 
+                role="tab" 
+                aria-label="Aller à la slide 2"
+                data-slide="1"
+            ></button>
+            <button 
+                class="carousel-indicator w-4 h-4 rounded-full bg-white bg-opacity-50 hover:bg-opacity-100 transition focus:outline-none focus:ring-2 focus:ring-white" 
+                role="tab" 
+                aria-label="Aller à la slide 3"
+                data-slide="2"
+            ></button>
+        </div>
+    </div>
+</section>
+
+<!-- Section Services -->
+<section id="services" class="py-16 bg-gray-100" aria-labelledby="services-heading">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="services-heading" class="text-3xl md:text-4xl font-bold text-center mb-12 text-black-custom">Nos Services</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Service 1 -->
+            <article class="bg-white rounded-lg shadow-lg p-6 text-center transition-transform hover:scale-105 focus-within:scale-105">
+                <div class="bg-yellow-custom w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
+                    <i class="fas fa-bolt text-2xl text-black-custom"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-black-custom">Installation Électrique</h3>
+                <p class="text-gray-600">Installation complète et sécurisée de vos systèmes électriques résidentiels et commerciaux.</p>
+            </article>
+            
+            <!-- Service 2 -->
+            <article class="bg-white rounded-lg shadow-lg p-6 text-center transition-transform hover:scale-105 focus-within:scale-105">
+                <div class="bg-yellow-custom w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
+                    <i class="fas fa-tools text-2xl text-black-custom"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-black-custom">Maintenance Électrique</h3>
+                <p class="text-gray-600">Entretien préventif et dépannage de vos installations électriques pour une sécurité optimale.</p>
+            </article>
+            
+            <!-- Service 3 -->
+            <article class="bg-white rounded-lg shadow-lg p-6 text-center transition-transform hover:scale-105 focus-within:scale-105">
+                <div class="bg-yellow-custom w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
+                    <i class="fas fa-faucet text-2xl text-black-custom"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-black-custom">Plomberie</h3>
+                <p class="text-gray-600">Installation, réparation et entretien de vos systèmes de plomberie pour un confort quotidien.</p>
+            </article>
+            
+            <!-- Service 4 -->
+            <article class="bg-white rounded-lg shadow-lg p-6 text-center transition-transform hover:scale-105 focus-within:scale-105">
+                <div class="bg-yellow-custom w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
+                    <i class="fas fa-wind text-2xl text-black-custom"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2 text-black-custom">Climatisation</h3>
+                <p class="text-gray-600">Installation et maintenance de systèmes de climatisation pour un environnement agréable.</p>
+            </article>
+        </div>
+        
+        <!-- Numéro d'urgence -->
+        <div class="mt-12 bg-yellow-custom rounded-lg p-8 text-center">
+            <h3 class="text-2xl font-bold mb-4 text-black-custom">Urgence 24h/24</h3>
+            <p class="text-lg mb-4 text-black-custom">En cas d'urgence, n'hésitez pas à nous appeler</p>
+            <a 
+                href="tel:+243812345678" 
+                class="inline-block bg-black-custom text-white px-6 py-3 rounded-lg font-bold text-xl hover:bg-gray-800 transition focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+            >
+                +243 858 444 000
+            </a>
+        </div>
+    </div>
+</section>
+
+    <!-- Section Histoire -->
+    <section id="histoire" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                    <img src="/images/image5.jpg" alt="Notre histoire" class="rounded-lg shadow-lg">
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-black-custom">Notre Histoire</h2>
+                    <p class="text-gray-700 mb-4">Basé en République Démocratique du Congo et fondée en 2013, Eagle
+                                                  Engineerings propose à ses clients des expertises fortes autour des
+                                                  problématiques de la Nouvelle Technologie de l’Information et de la
+                                                  Communication (NTIC), Energie et Génie Civil.</p>
+                    <p class="text-gray-700 mb-4">Avec plus de 7 ans d’expérience, nous vous accompagnons au travers de
+                                                  nos différents secteurs d’activités pour vous apporter des solutions en
+                                                  parfaite adéquation avec vos objectifs.</p>
+                    <p class="text-gray-700 mb-4">E-Engin en sigle, Eagle Engineerings est une société à responsabilité
+                                                  limitée, régie par l’acte uniforme de l’Ohada relatif au droit des sociétés
+                                                  commerciales et du Gie. Composé d’une équipe qui se démarque par sa
+                                                  réactivité et son expertise très appréciées, nous vous garantissons une
+                                                  écoute et un accompagnement de qualité.</p>
+                    <p class="text-yellow-500">Fiez-vous à nous, vous y prendrez l’habitude de collaborer avec nous.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Réalisations -->
+    <section id="realisations" class="py-16 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-black-custom">Nos Réalisations</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Réalisation 1 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="/images/image8.jpg" alt="Installation électrique" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-black-custom">Installation électrique complète</h3>
+                        <p class="text-gray-600 mb-4">Rénovation complète du système électrique d'une résidence de 5 chambres à Gombe.</p>
+                        <span class="inline-block bg-yellow-custom text-black-custom px-3 py-1 rounded-full text-sm font-semibold">Électricité</span>
+                    </div>
+                </div>
+                
+                <!-- Réalisation 2 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="/images/image7.jpg" alt="Système de plomberie" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-black-custom">Modernisation du système de plomberie</h3>
+                        <p class="text-gray-600 mb-4">Remplacement complet des canalisations et installation de nouveaux sanitaires pour un complexe commercial.</p>
+                        <span class="inline-block bg-yellow-custom text-black-custom px-3 py-1 rounded-full text-sm font-semibold">Plomberie</span>
+                    </div>
+                </div>
+                
+                <!-- Réalisation 3 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="/images/image6.jpg" alt="Climatisation centrale" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-black-custom">Installation de climatisation centrale</h3>
+                        <p class="text-gray-600 mb-4">Mise en place d'un système de climatisation centralisé pour un immeuble de bureaux de 10 étages.</p>
+                        <span class="inline-block bg-yellow-custom text-black-custom px-3 py-1 rounded-full text-sm font-semibold">Climatisation</span>
+                    </div>
+                </div>
+                
+                <!-- Réalisation 4 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="/images/image9.jpeg" alt="Rénovation électrique" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-black-custom">Rénovation électrique d'un hôtel</h3>
+                        <p class="text-gray-600 mb-4">Modernisation complète du système électrique d'un hôtel 4 étoiles avec mise aux normes internationales.</p>
+                        <span class="inline-block bg-yellow-custom text-black-custom px-3 py-1 rounded-full text-sm font-semibold">Électricité</span>
+                    </div>
+                </div>
+                
+                <!-- Réalisation 5 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="/images/image10.jpg" alt="Système d'irrigation" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-black-custom">Système de reseaux informatique</h3>
+                        <p class="text-gray-600 mb-4">Conception et installation d'un système de reseaux informatique pour un complexe résidentiel de luxe.</p>
+                        <span class="inline-block bg-yellow-custom text-black-custom px-3 py-1 rounded-full text-sm font-semibold">Plomberie</span>
+                    </div>
+                </div>
+                
+                <!-- Réalisation 6 -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                     <a href="mailto:hrtrmanzambi@gmail.com" class="block cursor-pointer">
+             <div class="bg-white rounded-lg shadow-lg overflow-hidden hover-lift hover:shadow-xl transition-all duration-300">
+                   <img src="/images/image11.jpg" alt="Maintenance préventive" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                   <h3 class="text-xl font-bold mb-2 text-gray-800">Contrat de maintenance préventive</h3>
+                <p class="text-gray-600 mb-4">Mise en place d'un programme de maintenance préventive pour une chaîne de supermarchés.</p>
+                <div class="flex justify-between items-center">
+                    <span class="inline-block bg-yellow-400 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">Cliquez pour nous contacter</span>
+                    
+                </div>
+            </div>
+        </div>
+    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Avis Clients -->
+    <section id="avis" class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-black-custom">Avis de Nos Clients</h2>
+            
+            <div class="relative overflow-hidden">
+                <div id="testimonials" class="flex transition-transform duration-500 ease-in-out">
+                    <!-- Témoignage 1 -->
+                    <div class="w-full flex-shrink-0 px-4">
+                        <div class="bg-white rounded-lg shadow-lg p-8">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-yellow-custom rounded-full flex items-center justify-center text-black-custom font-bold mr-4">JM</div>
+                                <div>
+                                    <h4 class="font-bold text-black-custom">Jean Mulumba</h4>
+                                    <p class="text-gray-600">Directeur, Hôtel Kin Plaza</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 italic">"L'équipe de Manzambi Services a réalisé une rénovation électrique complète de notre hôtel. Le travail a été effectué dans les délais et avec un professionnalisme remarquable. Je les recommande vivement!"</p>
+                            <div class="mt-4 text-yellow-custom">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 2 -->
+                    <div class="w-full flex-shrink-0 px-4">
+                        <div class="bg-white rounded-lg shadow-lg p-8">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-yellow-custom rounded-full flex items-center justify-center text-black-custom font-bold mr-4">AK</div>
+                                <div>
+                                    <h4 class="font-bold text-black-custom">Aline Kabasele</h4>
+                                    <p class="text-gray-600">Propriétaire, Résidence Les Palmiers</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 italic">"J'ai fait appel à E-engineering pour un problème de plomberie urgent. Ils sont intervenus rapidement et ont résolu le problème efficacement. Leur réactivité et leur expertise sont impressionnantes."</p>
+                            <div class="mt-4 text-yellow-custom">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 3 -->
+                    <div class="w-full flex-shrink-0 px-4">
+                        <div class="bg-white rounded-lg shadow-lg p-8">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-yellow-custom rounded-full flex items-center justify-center text-black-custom font-bold mr-4">PM</div>
+                                <div>
+                                    <h4 class="font-bold text-black-custom">Paul Mbuyi</h4>
+                                    <p class="text-gray-600">Gérant, Supermarché Express</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 italic">"Nous avons signé un contrat de maintenance avec Manzambi Services pour notre chaîne de supermarchés. Leur service est fiable et professionnel. Les interventions sont toujours rapides et efficaces."</p>
+                            <div class="mt-4 text-yellow-custom">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 4 -->
+                    <div class="w-full flex-shrink-0 px-4">
+                        <div class="bg-white rounded-lg shadow-lg p-8">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-yellow-custom rounded-full flex items-center justify-center text-black-custom font-bold mr-4">SN</div>
+                                <div>
+                                    <h4 class="font-bold text-black-custom">Sarah Ntumba</h4>
+                                    <p class="text-gray-600">Architecte d'intérieur</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 italic">"Je collabore régulièrement avec E-engineering pour mes projets de rénovation. Leur expertise technique et leur souci du détail complètent parfaitement mon travail de conception. Un partenariat précieux!"</p>
+                            <div class="mt-4 text-yellow-custom">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 5 -->
+                    <div class="w-full flex-shrink-0 px-4">
+                        <div class="bg-white rounded-lg shadow-lg p-8">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-yellow-custom rounded-full flex items-center justify-center text-black-custom font-bold mr-4">DK</div>
+                                <div>
+                                    <h4 class="font-bold text-black-custom">David Kanku</h4>
+                                    <p class="text-gray-600">Directeur, École Primaire Saint Michel</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 italic">"Manzambi Services a installé notre système de climatisation centrale. Le projet a été mené avec professionnalisme, respectant le budget et les délais. Les techniciens sont compétents et courtois."</p>
+                            <div class="mt-4 text-yellow-custom">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contrôles des témoignages -->
+                <button id="testimonial-prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black-custom bg-opacity-50 text-white p-2 rounded-full">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="testimonial-next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black-custom bg-opacity-50 text-white p-2 rounded-full">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Contact -->
+    <section id="contact" class="py-16 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row">
+                <!-- Carte -->
+                      <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-black-custom">Notre Localisation</h2>
+            
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/2">
+                    <div class="map-container h-96">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3978.037171709361!2d15.28721547502034!3d-4.316395842226287!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1a6a33b08c6bd4c9%3A0x5d9c1b2a4e8e8b0a!2sKinshasa%2C%20R%C3%A9publique%20D%C3%A9mocratique%20du%20Congo!5e0!3m2!1sfr!2sfr!4v1690000000000!5m2!1sfr!2sfr" 
+                                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <div class="map-overlay">
+                            <a href="https://goo.gl/maps/example" target="_blank" class="bg-white text-black-custom px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+                                Voir sur Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Informations de contact -->
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-bold mb-4 text-black-custom">Contactez-nous</h3>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <div class="mb-6">
+                            <h4 class="font-bold text-black-custom mb-2">Téléphone</h4>
+                            <p class="text-gray-700">+243 858 444 000</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-bold text-black-custom mb-2">Adresse</h4>
+                            <p class="text-gray-700">Avenue de la Justice, N°123Gombe, Kinshasa
+                              306, avenue de la GombeLocal 6,<br> Hôtel VenusKinshasa-Gombe<br>République Démocratique du Congo
+                            </p>
+                        </div>
+                        
+                      <div class="mb-6">
+    <h4 class="font-bold text-black-custom mb-2">Réseaux sociaux</h4>
+    <div class="flex space-x-4">
+        <a href="https://facebook.com/manzambiservices" target="_blank" class="text-black-custom hover:text-yellow-500 transition transform hover:scale-110">
+            <i class="fab fa-facebook-f text-xl"></i>
+        </a>
+        <a href="https://linkedin.com/company/manzambi-services" target="_blank" class="text-black-custom hover:text-yellow-500 transition transform hover:scale-110">
+            <i class="fab fa-linkedin-in text-xl"></i>
+        </a>
+        <a href="https://twitter.com/manzambiservices" target="_blank" class="text-black-custom hover:text-yellow-500 transition transform hover:scale-110">
+            <i class="fab fa-x-twitter text-xl"></i>
+        </a>
+        <a href="https://instagram.com/manzambiservices" target="_blank" class="text-black-custom hover:text-yellow-500 transition transform hover:scale-110">
+            <i class="fab fa-instagram text-xl"></i>
+        </a>
+        <a href="https://wa.me/243812345678" target="_blank" class="text-black-custom hover:text-yellow-500 transition transform hover:scale-110">
+            <i class="fab fa-whatsapp text-xl"></i>
+        </a>
+    </div>
+</div>
+                        
+                        <div>
+                            <h4 class="font-bold text-black-custom mb-2">Heures d'ouverture</h4>
+                            <p class="text-gray-700">Lundi - Vendredi: 8h00 - 18h00</p>
+                            <p class="text-gray-700">Samedi: 9h00 - 13h00</p>
+                            <p class="text-gray-700">Urgences: 24h/24, 7j/7</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black-custom text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p>&copy; 2023 Manzambi Services. Tous droits réservés.</p>
+                </div>
+                <div>
+                    <p>Développé par <a href="https://linkedin.com/in/heritier-manzambi" class="text-yellow-custom hover:underline">Heritier Manzambi</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu mobile
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Carrousel principal
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('#carousel > div');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            if (index < 0) {
+                currentSlide = totalSlides - 1;
+            } else if (index >= totalSlides) {
+                currentSlide = 0;
+            } else {
+                currentSlide = index;
+            }
+            
+            const carousel = document.getElementById('carousel');
+            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Mettre à jour les indicateurs
+            indicators.forEach((indicator, i) => {
+                if (i === currentSlide) {
+                    indicator.classList.remove('bg-opacity-50');
+                    indicator.classList.add('bg-opacity-100');
+                } else {
+                    indicator.classList.remove('bg-opacity-100');
+                    indicator.classList.add('bg-opacity-50');
+                }
+            });
+        }
+
+        document.getElementById('prev').addEventListener('click', () => {
+            showSlide(currentSlide - 1);
+        });
+
+        document.getElementById('next').addEventListener('click', () => {
+            showSlide(currentSlide + 1);
+        });
+
+        // Ajouter des écouteurs d'événements aux indicateurs
+        indicators.forEach((indicator, i) => {
+            indicator.addEventListener('click', () => {
+                showSlide(i);
+            });
+        });
+
+        // Carrousel automatique
+        setInterval(() => {
+            showSlide(currentSlide + 1);
+        }, 5000);
+
+        // Carrousel des témoignages
+        let currentTestimonial = 0;
+        const testimonials = document.querySelectorAll('#testimonials > div');
+        const totalTestimonials = testimonials.length;
+
+        function showTestimonial(index) {
+            if (index < 0) {
+                currentTestimonial = totalTestimonials - 1;
+            } else if (index >= totalTestimonials) {
+                currentTestimonial = 0;
+            } else {
+                currentTestimonial = index;
+            }
+            
+            const testimonialCarousel = document.getElementById('testimonials');
+            testimonialCarousel.style.transform = `translateX(-${currentTestimonial * 100}%)`;
+        }
+
+        document.getElementById('testimonial-prev').addEventListener('click', () => {
+            showTestimonial(currentTestimonial - 1);
+        });
+
+        document.getElementById('testimonial-next').addEventListener('click', () => {
+            showTestimonial(currentTestimonial + 1);
+        });
+
+        // Navigation fluide
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Fermer le menu mobile si ouvert
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+          let isChatbotOpen = false;
+
+        function toggleChatbot() {
+            const chatbotWindow = document.getElementById('chatbotWindow');
+            isChatbotOpen = !isChatbotOpen;
+            chatbotWindow.style.display = isChatbotOpen ? 'flex' : 'none';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const message = userInput.value.trim();
+
+            if (message === '') return;
+
+            // Ajouter le message de l'utilisateur
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.textContent = message;
+            messagesContainer.appendChild(userMessage);
+
+            // Réponse automatique simple (à améliorer)
+            setTimeout(() => {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot-message';
+                
+                // Réponses prédéfinies basiques
+                const responses = {
+                    'bonjour': 'Bonjour ! Comment puis-je vous aider ?',
+                    'prix': 'Pour connaître nos tarifs, veuillez nous contacter par téléphone ou email.',
+                    'service': 'Nous proposons des services de maintenance préventive pour supermarchés.',
+                    'contact': 'Vous pouvez nous joindre au +243 858 444 000 ou par email.',
+                    'default': 'Je comprends votre demande. Un de nos conseillers vous répondra rapidement.'
+                };
+
+                const lowerMessage = message.toLowerCase();
+                let response = responses.default;
+
+                for (const [key, value] of Object.entries(responses)) {
+                    if (lowerMessage.includes(key)) {
+                        response = value;
+                        break;
+                    }
+                }
+
+                botMessage.textContent = response;
+                messagesContainer.appendChild(botMessage);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000);
+
+            userInput.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>
