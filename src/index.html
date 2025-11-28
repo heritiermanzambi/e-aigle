@@ -69,6 +69,7 @@
     </script>
 
     <style>
+        
         html {
             scroll-behavior: smooth;
         }
@@ -236,18 +237,18 @@
                 <!-- Logo -->
                 <div class="flex items-center">
                     <div class="flex-shrink-0 flex items-center">
-                        <img src="/images/logo.png" alt="aigle engineering" class="h-24 w-auto mr-2">
+                        <img src="./images/logo.png" alt="aigle engineering" class="h-24 w-auto mr-2">
                         <!--span class="text-xl font-bold text-black-custom">aigle engineering</span!-->
                     </div>
                 </div>
 
                 <!-- Menu Desktop -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#accueil" class="text-black-custom hover:text-black-custom transition font-medium">Accueil</a>
-    <a href="#services" class="text-black-custom hover:text-black-custom transition font-medium">Nos services</a>
-    <a href="#histoire" class="text-black-custom hover:text-black-custom transition font-medium">Notre histoire</a>
-    <a href="#realisations" class="text-black-custom hover:text-black-custom transition font-medium">Nos réalisations</a>
-    <a href="#avis" class="text-black-custom hover:text-black-custom transition font-medium">Avis clients</a>
+                    <a href="home.html" class="text-black-custom hover:text-black-custom transition font-medium">Accueil</a>
+    <a href="services.html" class="text-black-custom hover:text-black-custom transition font-medium">Nos services</a>
+    <a href="histoire.html" class="text-black-custom hover:text-black-custom transition font-medium">Notre histoire</a>
+    <a href="realisations.html" class="text-black-custom hover:text-black-custom transition font-medium">Nos réalisations</a>
+    <a href="avis.html" class="text-black-custom hover:text-black-custom transition font-medium">Avis clients</a>
     <a href="https://wa.me/243858444000?text=Bonjour,%20je%20suis%20intéressé(e)%20par%20vos%20services%20de%20maintenance%20préventive" 
        target="_blank" 
        class="text-black-custom font-bold hover:text-green-600 transition flex items-center">
@@ -271,7 +272,7 @@
 
         <!-- Menu Mobile Dropdown -->
         <div id="mobile-menu" class="md:hidden hidden bg-yellow-custom">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <div class="px-0 pt-2 pb-3 space-y-1 sm:px-3">
                <a href="#accueil" class="block px-3 py-2 text-black-custom hover:text-black-custom font-medium">Accueil</a>
 <a href="#services" class="block px-3 py-2 text-black-custom hover:text-black-custom font-medium">Nos services</a>
 <a href="#histoire" class="block px-3 py-2 text-black-custom hover:text-black-custom font-medium">Notre histoire</a>
@@ -289,50 +290,16 @@
         </div>
     </nav>
 
-
-   <!-- Chatbot IA -->
-    <div class="chatbot-container">
-        <div class="chatbot-window" id="chatbotWindow">
-            <div class="chatbot-header">
-                <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    <span>Assistant IA</span>
-                </div>
-                <button onclick="toggleChatbot()" class="text-white">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="chatbot-messages" id="chatbotMessages">
-                <div class="message bot-message">
-                    Bonjour ! Je suis votre assistant IA. Comment puis-je vous aider aujourd'hui ?
-                </div>
-            </div>
-            <div class="chatbot-input">
-                <input type="text" id="userInput" placeholder="Tapez votre message..." onkeypress="handleKeyPress(event)">
-                <button class="send-button" onclick="sendMessage()">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
-        <div class="chatbot-button" onclick="toggleChatbot()">
-            <i class="fas fa-robot text-xl"></i>
-        </div>
-    </div>
-
-    
-
-    <!-- Section Accueil - Carrousel -->
-   <!-- Section Accueil - Carrousel -->
 <!-- Section Accueil - Carrousel -->
-<section id="accueil" class="pt-16" aria-labelledby="carousel-heading">
-    <div class="relative overflow-hidden h-screen">
+<section id="accueil" class="pt-0 md:pt-5" aria-labelledby="carousel-heading">
+    <div class="relative overflow-hidden ">
         <!-- Carrousel -->
         <div id="carousel" class="flex transition-transform duration-700 ease-in-out" role="region" aria-label="Carrousel de présentation">
             <!-- Slide 1 -->
             <div class="w-full flex-shrink-0 relative" role="group" aria-label="Slide 1 sur 3">
                 <div class="absolute inset-0 bg-black opacity-40" aria-hidden="true"></div>
                 <img 
-                    src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" 
+                    src="./images/hero2.JPG"
                     alt="Technicien électricien effectuant une installation électrique professionnelle"
                     class="w-full h-full object-cover object-center"
                     loading="lazy"
@@ -354,7 +321,7 @@
             <div class="w-full flex-shrink-0 relative" role="group" aria-label="Slide 2 sur 3">
                 <div class="absolute inset-0 bg-black opacity-40" aria-hidden="true"></div>
                 <img 
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStEYO9zNigiiaB2Zuyce47Gya068yEljqxRBV0byzGALNxTI7rfk4pCmFL5WrCIBw5ReU&usqp=CAU" 
+                    src="./images/power.jpg" 
                     alt="Technicien en plomberie réalisant une installation de système hydraulique"
                     class="w-full h-full object-cover object-center"
                     loading="lazy"
@@ -364,7 +331,7 @@
                         <div class="text-white p-6 bg-black bg-opacity-30 rounded-lg backdrop-blur-sm">
                             <h2 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">Des solutions durables</h2>
                             <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">"La qualité reste longtemps après que le prix est oublié. Nous privilégions des solutions durables pour votre confort."</p>
-                            <a href="#services" class="inline-block bg-yellow-custom text-black-custom px-8 py-4 rounded-lg font-bold hover:bg-yellow-600 transition focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-lg">
+                            <a href="services.html" class="inline-block bg-yellow-custom text-black-custom px-8 py-4 rounded-lg font-bold hover:bg-yellow-600 transition focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-lg">
                                 Nos services
                             </a>
                         </div>
@@ -376,7 +343,7 @@
             <div class="w-full flex-shrink-0 relative" role="group" aria-label="Slide 3 sur 3">
                 <div class="absolute inset-0 bg-black opacity-40" aria-hidden="true"></div>
                 <img 
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz5Fg-3vgfw3jR-K5uMi36uJHy2mo-mML9FA&s" 
+                    src="./images/3D.png" 
                     alt="Technicien spécialisé en climatisation installant un système de refroidissement"
                     class="w-full h-full object-cover object-center"
                     loading="lazy"
@@ -388,7 +355,7 @@
                             <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto">"Notre force réside dans la qualité de
                                                                                    nos prestations et l’esprit d’excellence
                                                                                     qui nous anime."</p>
-                            <a href="#realisations" class="inline-block bg-yellow-custom text-black-custom px-8 py-4 rounded-lg font-bold hover:bg-yellow-600 transition focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-lg">
+                            <a href="realisations.html" class="inline-block bg-yellow-custom text-black-custom px-8 py-4 rounded-lg font-bold hover:bg-yellow-600 transition focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-lg">
                                 Nos réalisations
                             </a>
                         </div>
@@ -440,68 +407,82 @@
 </section>
 
 <!-- Section Services -->
-<section id="services" class="py-16 bg-gray-100" aria-labelledby="services-heading">
+<section id="services" class="py-16 bg-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 id="services-heading" class="text-3xl md:text-4xl font-bold text-center mb-12 text-black-custom">Nos Services</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Titre -->
+        <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-14 text-black-custom">
+            Nos Services
+        </h2>
+
+        <!-- Grille -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            
             <!-- Service 1 -->
-            <article class="bg-white rounded-lg shadow-lg p-6 text-center transition-transform hover:scale-105 focus-within:scale-105">
-                <div class="bg-yellow-custom w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                    <i class="fas fa-bolt text-2xl text-black-custom"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-black-custom">Installation Électrique</h3>
-                <p class="text-gray-600">Installation complète et sécurisée de vos systèmes électriques résidentiels et commerciaux.</p>
-            </article>
-            
+            <div class="service-card opacity-0 translate-y-6 transition-all duration-700">
+                <article class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition">
+                    <img 
+                        src="./images/maintordi.jpg"  
+                        alt="NTIC service"
+                        class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-700"
+                    >
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-black-custom">NTiC</h3>
+                        <p class="text-gray-600">
+                            Solutions numériques, développement web, cybersécurité 
+                            et réseaux informatiques modernes.
+                        </p>
+                    </div>
+                </article>
+            </div>
+
             <!-- Service 2 -->
-            <article class="bg-white rounded-lg shadow-lg p-6 text-center transition-transform hover:scale-105 focus-within:scale-105">
-                <div class="bg-yellow-custom w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                    <i class="fas fa-tools text-2xl text-black-custom"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-black-custom">Maintenance Électrique</h3>
-                <p class="text-gray-600">Entretien préventif et dépannage de vos installations électriques pour une sécurité optimale.</p>
-            </article>
-            
+            <div class="service-card opacity-0 translate-y-6 transition-all duration-700 delay-200">
+                <article class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition">
+                    <img 
+                        src="./images/power.jpg" 
+                        alt="Énergie service"
+                        class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-700"
+                    >
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-black-custom">Énergie</h3>
+                        <p class="text-gray-600">
+                            Énergies renouvelables, solaire, maintenance et installation 
+                            de systèmes électriques.
+                        </p>
+                    </div>
+                </article>
+            </div>
+
             <!-- Service 3 -->
-            <article class="bg-white rounded-lg shadow-lg p-6 text-center transition-transform hover:scale-105 focus-within:scale-105">
-                <div class="bg-yellow-custom w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                    <i class="fas fa-faucet text-2xl text-black-custom"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-black-custom">Plomberie</h3>
-                <p class="text-gray-600">Installation, réparation et entretien de vos systèmes de plomberie pour un confort quotidien.</p>
-            </article>
-            
-            <!-- Service 4 -->
-            <article class="bg-white rounded-lg shadow-lg p-6 text-center transition-transform hover:scale-105 focus-within:scale-105">
-                <div class="bg-yellow-custom w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
-                    <i class="fas fa-wind text-2xl text-black-custom"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-black-custom">Climatisation</h3>
-                <p class="text-gray-600">Installation et maintenance de systèmes de climatisation pour un environnement agréable.</p>
-            </article>
-        </div>
-        
-        <!-- Numéro d'urgence -->
-        <div class="mt-12 bg-yellow-custom rounded-lg p-8 text-center">
-            <h3 class="text-2xl font-bold mb-4 text-black-custom">Urgence 24h/24</h3>
-            <p class="text-lg mb-4 text-black-custom">En cas d'urgence, n'hésitez pas à nous appeler</p>
-            <a 
-                href="tel:+243812345678" 
-                class="inline-block bg-black-custom text-white px-6 py-3 rounded-lg font-bold text-xl hover:bg-gray-800 transition focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
-            >
-                +243 858 444 000
-            </a>
+            <div class="service-card opacity-0 translate-y-6 transition-all duration-700 delay-300">
+                <article class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition">
+                    <img 
+                        src="./images/hero@.JPG"  
+                        alt="Génie Civil service"
+                        class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-700"
+                    >
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-black-custom">Génie Civil</h3>
+                        <p class="text-gray-600">
+                            Études, conception et réalisation d’ouvrages publics 
+                            et privés avec expertise.
+                        </p>
+                    </div>
+                </article>
+            </div>
+
         </div>
     </div>
 </section>
+
 
     <!-- Section Histoire -->
     <section id="histoire" class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row items-center">
                 <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvsgg8TzVbkUuBkob2froiPjbrVGHSdg5Z2A&s" alt="Notre histoire" class="rounded-lg shadow-lg">
+                    <img src="./images/hero6.png" alt="Notre histoire" class="rounded-lg shadow-lg">
                 </div>
                 <div class="md:w-1/2">
                     <h2 class="text-3xl md:text-4xl font-bold mb-6 text-black-custom">Notre Histoire</h2>
@@ -793,6 +774,9 @@
         </div>
     </section>
 
+
+    
+
     <!-- Footer -->
     <footer class="bg-black-custom text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -971,6 +955,22 @@
             userInput.value = '';
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
+
+
+    const cards = document.querySelectorAll('.service-card');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.remove('opacity-0', 'translate-y-6');
+                entry.target.classList.add('opacity-100', 'translate-y-0');
+            }
+        });
+    }, { threshold: 0.2 });
+
+    cards.forEach(card => observer.observe(card));
+
+
     </script>
 </body>
 </html>
